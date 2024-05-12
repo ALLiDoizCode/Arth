@@ -1,10 +1,10 @@
 {
     "manifest_version":3,
-    "name":"wallet",
+    "name":"arth",
     "version":"0.1.0",
-    "description":"My Extension Wallet",
+    "description":"Web3 Wallet",
     "actions":{
-        "default_title":"Wallet",
+        "default_title":"Arth",
         "default_popup":"index.html"
     },
     "premissions":[
