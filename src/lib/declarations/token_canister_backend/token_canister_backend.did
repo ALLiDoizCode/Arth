@@ -1,0 +1,162 @@
+type TransferRequest = 
+ record {
+   amount: nat;
+   id: nat;
+   to: text;
+ };
+type TransferFromRequest = 
+ record {
+   amount: nat;
+   from: text;
+   id: nat;
+   to: text;
+ };
+type TransactionType = 
+ variant {
+   Add: Liquidy;
+   Approve: Transaction;
+   Burn: Transaction;
+   Lock: Transaction;
+   Mint: Transaction;
+   Remove: Liquidy;
+   Swap: Liquidy;
+   Transfer: Transaction;
+   TransferFrom: Transaction;
+ };
+type Transaction = 
+ record {
+   amount: nat;
+   createdAt: Time;
+   from: text;
+   id: nat;
+   to: text;
+ };
+type TokenResult = 
+ variant {
+   Err: TokenError;
+   Ok: nat;
+ };
+type TokenRequest = 
+ record {
+   decimals: nat;
+   icon: text;
+   minter: text;
+   name: text;
+   symbol: text;
+   tribute: text;
+ };
+type TokenInfo = 
+ record {
+   createdAt: Time;
+   decimals: nat;
+   holders: nat;
+   icon: text;
+   minter: text;
+   name: text;
+   supply: nat;
+   symbol: text;
+   transactions: nat;
+ };
+type TokenError = 
+ variant {
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InsufficientAllowance: record {balance: nat;};
+   InsufficientFunds: record {balance: nat;};
+   Slippage: nat;
+   Unauthorized;
+ };
+type TokenCanister = 
+ service {
+   add: (nat, record {
+                nat;
+                nat;
+              }) -> (TokenResult);
+   allowance: (AllowanceRequest) -> (nat) query;
+   approve: (ApproveRequest) -> (TokenResult);
+   balance: (BalanceRequest) -> (nat) query;
+   createPools: (vec record {
+                       nat;
+                       nat;
+                     }) -> (vec TokenResult);
+   createTokens: (TokenRequest, vec MintRequest) -> (vec TokenResult);
+   fetchHolders: (nat, nat, nat) -> (vec record {
+                                           text;
+                                           nat;
+                                         }) query;
+   fetchPools: () -> (vec PoolInfo) query;
+   fetchTokens: () -> (vec TokenInfo) query;
+   fetchTransactions: (nat, nat, nat) -> (vec TransactionType) query;
+   getCycles: () -> (nat) query;
+   getEquivalentTokenAEstimate: (nat, nat) -> (nat);
+   getEquivalentTokenBEstimate: (nat, nat) -> (nat);
+   getHeapSize: () -> (nat) query;
+   getMemorySize: () -> (nat) query;
+   getShares: (nat, text) -> (nat) query;
+   getSwapTokenAEstimate: (nat, nat) -> (nat);
+   getSwapTokenAEstimateGivenTokenB: (nat, nat) -> (nat);
+   getSwapTokenBEstimate: (nat, nat) -> (nat);
+   getSwapTokenBEstimateGivenTokenA: (nat, nat) -> (nat);
+   getTransaction: (nat, nat) -> (opt TransactionType) query;
+   getWithdrawEstimate: (nat, nat) -> (record {
+                                         shareA: nat;
+                                         shareB: nat;
+                                       });
+   lock: (nat) -> (TokenResult);
+   mint: (vec MintRequest) -> (vec TokenResult);
+   poolInfo: (nat) -> (opt PoolInfo) query;
+   price: (nat) -> (nat);
+   remove: (nat, nat) -> (TokenResult);
+   swapTokenA: (nat, nat, nat) -> (TokenResult);
+   swapTokenB: (nat, nat, nat) -> (TokenResult);
+   tokenInfo: (nat) -> (opt TokenInfo) query;
+   transfer: (TransferRequest) -> (TokenResult);
+   transferFrom: (vec TransferFromRequest) -> (vec TokenResult);
+ };
+type Time = int;
+type PoolInfo = 
+ record {
+   createdAt: Time;
+   id: nat;
+   pair: record {
+           nat;
+           nat;
+         };
+   precision: nat;
+   swaps: nat;
+   totalShares: nat;
+ };
+type MintRequest = 
+ record {
+   amount: nat;
+   id: nat;
+   to: text;
+ };
+type Liquidy = 
+ record {
+   createdAt: Time;
+   id: nat;
+   owner: text;
+   share: nat;
+ };
+type BalanceRequest = 
+ record {
+   id: nat;
+   owner: text;
+ };
+type ApproveRequest = 
+ record {
+   amount: nat;
+   id: nat;
+   to: text;
+ };
+type AllowanceRequest = 
+ record {
+   amount: nat;
+   from: text;
+   id: nat;
+   to: text;
+ };
+service : () -> TokenCanister
