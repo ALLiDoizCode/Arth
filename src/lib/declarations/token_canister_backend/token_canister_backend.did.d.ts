@@ -40,6 +40,7 @@ export interface TokenCanister {
     [TokenRequest, Array<MintRequest>],
     Array<TokenResult>
   >,
+  'fetchBalances' : ActorMethod<[], Array<[TokenInfo, bigint]>>,
   'fetchHolders' : ActorMethod<
     [bigint, bigint, bigint],
     Array<[string, bigint]>

@@ -82,6 +82,10 @@ type TokenCanister =
                        nat;
                      }) -> (vec TokenResult);
    createTokens: (TokenRequest, vec MintRequest) -> (vec TokenResult);
+   fetchBalances: () -> (vec record {
+                               TokenInfo;
+                               nat;
+                             }) query;
    fetchHolders: (nat, nat, nat) -> (vec record {
                                            text;
                                            nat;
