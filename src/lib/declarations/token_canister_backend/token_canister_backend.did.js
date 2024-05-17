@@ -36,14 +36,6 @@ export const idlFactory = ({ IDL }) => {
     'amount' : IDL.Nat,
   });
   const Time = IDL.Int;
-  const PoolInfo = IDL.Record({
-    'id' : IDL.Nat,
-    'createdAt' : Time,
-    'pair' : IDL.Tuple(IDL.Nat, IDL.Nat),
-    'precision' : IDL.Nat,
-    'swaps' : IDL.Nat,
-    'totalShares' : IDL.Nat,
-  });
   const TokenInfo = IDL.Record({
     'decimals' : IDL.Nat,
     'icon' : IDL.Text,
@@ -54,6 +46,14 @@ export const idlFactory = ({ IDL }) => {
     'holders' : IDL.Nat,
     'transactions' : IDL.Nat,
     'symbol' : IDL.Text,
+  });
+  const PoolInfo = IDL.Record({
+    'id' : IDL.Nat,
+    'createdAt' : Time,
+    'pair' : IDL.Tuple(IDL.Nat, IDL.Nat),
+    'precision' : IDL.Nat,
+    'swaps' : IDL.Nat,
+    'totalShares' : IDL.Nat,
   });
   const Liquidy = IDL.Record({
     'id' : IDL.Nat,
@@ -104,6 +104,11 @@ export const idlFactory = ({ IDL }) => {
         [TokenRequest, IDL.Vec(MintRequest)],
         [IDL.Vec(TokenResult)],
         [],
+      ),
+    'fetchBalances' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Tuple(TokenInfo, IDL.Nat))],
+        ['query'],
       ),
     'fetchHolders' : IDL.Func(
         [IDL.Nat, IDL.Nat, IDL.Nat],
